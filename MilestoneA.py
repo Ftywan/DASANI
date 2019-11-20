@@ -71,7 +71,7 @@ Team:
 # Change the following to represent your own information:
 
 maggie = Partner("Tianyuan", "Fu", "tyfu")
-john = Partner("Jinghan", "Lu", "")
+john = Partner("Jinghan", "Lu", "jinghanl")
 team = [maggie, john]
 
 OPTION = '4'
@@ -79,17 +79,15 @@ OPTION = '4'
 # TODO
 title = "CpG Island Detector for DNA"
 
-approach = '''Our approach will be to first understand the rules,
-then code our move generator, develop a static evaluation function,
-a personality for the agent, and then optimize using alpha-beta
-pruning, Zobrist hashing, and comparison of alternative static
-evaluation functions.'''
+approach = '''Our approach will be to first do reseach on 
+CpG defination and related bioinformatic techneques,
+second determine the observation and state objects, 
+design and implement both forward and Viterbi algorithms,
+test based on CLI ouputs and finally visualize the output.'''
 
-workload_distribution = '''Maggie will have primary responsibility for the 
-static evaluation function, John will have primary responsibility for
-the optimizations of alpha-beta pruning and Zobrist hashing, and both
-partners expect to be closely involved in writing the move-generation
-code and defining the personality of the agent.'''
+workload_distribution = '''We did reseach and determined the topic together.
+Tianyuan Fu: Implement the forward algorithm and GUI with Tkinter.\n
+Jinghan Lu: Implement the Viterbi algorithm and apply testing'''
 
 reference1 = '''Wikipedia article on CpG Site;
     URL: https://en.wikipedia.org/wiki/CpG_site (accessed Nov. 19, 2019)'''
@@ -97,7 +95,10 @@ reference1 = '''Wikipedia article on CpG Site;
 reference2 = '''"Introduction to Hidden Markov Models for Gene Prediction," by Drexel University ECE Dept.,
     available online at: https://faculty.coe.drexel.edu/gailr/ECE-S690-503/markov_models.ppt.pdf'''
 
-our_submission = Who_and_what([maggie, john], OPTION, title, approach, workload_distribution, [reference1, reference2])
+reference3 = '''NCBI database;
+    available online at: ftp://ftp.ncbi.nih.gov/genomes/Homo_sapiens/ARCHIVE/ANNOTATION_RELEASE.109/'''
+
+our_submission = Who_and_what([maggie, john], OPTION, title, approach, workload_distribution, [reference1, reference2, reference3])
 
 # You can run this file from the command line by typing:
 # python3 who_and_what.py
