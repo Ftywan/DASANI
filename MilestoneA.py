@@ -80,13 +80,14 @@ OPTION = '4'
 title = "CpG Island Detector for DNA"
 
 approach = '''Our approach will be to first do reseach on 
-CpG defination and related bioinformatic techneques,
-second determine the observation and state objects, 
-design and implement both forward and Viterbi algorithms,
-test based on CLI ouputs and finally visualize the output.'''
+CpG defination and related bioinformatic techneques;
+second determine the observation and state objects;
+third, find and download dataset for this project;
+fourth, design and implement both forward and Viterbi algorithms,
+and finally test based on CLI ouputs and finally visualize the output.'''
 
-workload_distribution = '''We did reseach and determined the topic together.
-Tianyuan Fu: Implement the forward algorithm and GUI with Tkinter.\n
+workload_distribution = '''We did reseach and determined our application domain for HMM together.
+Tianyuan Fu: Implement the forward algorithm and GUI with Tkinter.
 Jinghan Lu: Implement the Viterbi algorithm and apply testing'''
 
 reference1 = '''Wikipedia article on CpG Site;
@@ -95,7 +96,7 @@ reference1 = '''Wikipedia article on CpG Site;
 reference2 = '''"Introduction to Hidden Markov Models for Gene Prediction," by Drexel University ECE Dept.,
     available online at: https://faculty.coe.drexel.edu/gailr/ECE-S690-503/markov_models.ppt.pdf'''
 
-reference3 = '''NCBI database;
+reference3 = '''National Center for Biotechnology Information database;
     available online at: ftp://ftp.ncbi.nih.gov/genomes/Homo_sapiens/ARCHIVE/ANNOTATION_RELEASE.109/'''
 
 our_submission = Who_and_what([maggie, john], OPTION, title, approach, workload_distribution, [reference1, reference2, reference3])
