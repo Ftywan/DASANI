@@ -70,14 +70,14 @@ Team:
 
 # Change the following to represent your own information:
 
-maggie = Partner("Smith", "Margaret", "maggiesmith99")
-john = Partner("Doe", "John", "jd007")
+maggie = Partner("Tianyuan", "Fu", "tyfu")
+john = Partner("Jinghan", "Lu", "")
 team = [maggie, john]
 
-OPTION = '1'
+OPTION = '4'
 # Legal options are 1, 2, 4, and 4.
-
-title = "A Blustering Baroque Chess Player"
+# TODO
+title = "CpG Island Detector for DNA"
 
 approach = '''Our approach will be to first understand the rules,
 then code our move generator, develop a static evaluation function,
@@ -91,11 +91,11 @@ the optimizations of alpha-beta pruning and Zobrist hashing, and both
 partners expect to be closely involved in writing the move-generation
 code and defining the personality of the agent.'''
 
-reference1 = '''Wikipedia article on Baroque Chess;
-    URL: https://en.wikipedia.org/wiki/Baroque_chess (accessed Nov. 18, 2019)'''
+reference1 = '''Wikipedia article on CpG Site;
+    URL: https://en.wikipedia.org/wiki/CpG_site (accessed Nov. 19, 2019)'''
 
-reference2 = '''"What\'s Wrong with Ultima," by Robert Abbott,
-    available online at: http://www.logicmazes.com/games/wgr.html'''
+reference2 = '''"Introduction to Hidden Markov Models for Gene Prediction," by Drexel University ECE Dept.,
+    available online at: https://faculty.coe.drexel.edu/gailr/ECE-S690-503/markov_models.ppt.pdf'''
 
 our_submission = Who_and_what([maggie, john], OPTION, title, approach, workload_distribution, [reference1, reference2])
 
