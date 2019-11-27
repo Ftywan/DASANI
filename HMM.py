@@ -7,6 +7,16 @@ OBSERVATIONS = ['A', 'G', 'C', 'T']
 # global variable
 state_sequence = []  # list of all training data
 cpg_islands = []
+disjoint_prob = {}
+transition_prob = {}
+emission_prob = {'A+':{'A': 1.0, 'G': 0.0, 'C': 0.0, 'T': 0.0},
+                 'A-':{'A': 1.0, 'G': 0.0, 'C': 0.0, 'T': 0.0},
+                 'G+':{'A': 0.0, 'G': 1.0, 'C': 0.0, 'T': 0.0},
+                 'G-':{'A': 0.0, 'G': 1.0, 'C': 0.0, 'T': 0.0},
+                 'C+':{'A': 0.0, 'G': 0.0, 'C': 1.0, 'T': 0.0},
+                 'C-':{'A': 0.0, 'G': 0.0, 'C': 1.0, 'T': 0.0},
+                 'T+':{'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0},
+                 'T+':{'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0}}
 
 def load_sequence_data():
     # read sequence data
@@ -16,7 +26,9 @@ def load_sequence_data():
         for state in line:
             if state != '\n':
                 state_sequence.append(state)
+    print(state_sequence)
     # done reading sequence data
+
 
 def load_cpg_data():
     # read cpg island positions
@@ -71,6 +83,26 @@ def calculate_probability():
             index += 1
     print(disjoint_count)
     print(transition_count)
+
+    # calculate disjoint probability
+    for state in disjoint_count:
+        disjoint_prob[state] = disjoint_count[state] / len(state_sequence)
+    # calculate transition probability
+    state_transition = {}  # total transition count for each state
+    for state in transition_count:
+        state_transition[state] = 0
+        for next_state in transition_count[state]:
+            state_transition[state] += transition_count[state][next_state]
+    
+    for state in transition_count:
+        temp = {}
+        for next_state in transition_count[state]:
+            temp[next_state] = transition_count[state][next_state] / state_transition[state]
+            transition_prob[state] = temp
+    
+    print(disjoint_prob)
+    print(sum(disjoint_prob.values()))
+    print(transition_prob)
 
 
 if __name__ == "__main__":
