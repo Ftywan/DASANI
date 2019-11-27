@@ -1,47 +1,79 @@
+# constant
 SEQUENCE_PATH = 'data/training.txt'
+CPG_POSITION_PATH = 'data/cpg_train.txt'
+STATES = ['A+', 'G+', 'C+', 'T+', 'A-', 'G-', 'C-', 'T-']
+OBSERVATIONS = ['A', 'G', 'C', 'T']
 
-# read in data
+# global variable
 state_sequence = []  # list of all training data
-f = open(SEQUENCE_PATH, 'r')
-x = f.readlines()
-for line in x:
-    for state in line:
-        if state != '\n':
-            state_sequence.append(state)
-print('length of sequence')
-print(len(state_sequence))
-# done reading data
+cpg_islands = []
 
-# calculate probability
-# count
-disjoint_count = {'A': 0, 'G': 0, 'C': 0, 'T': 0}
-transition_count = {'A': {'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                    'G': {'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                    'C': {'A': 0, 'G': 0, 'C': 0, 'T': 0},
-                    'T': {'A': 0, 'G': 0, 'C': 0, 'T': 0}
-                    }
-for i in range(len(state_sequence)):
-    disjoint_count[state_sequence[i]] += 1
-    if i != len(state_sequence) - 1:
-        transition_count[state_sequence[i]][state_sequence[i + 1]] += 1
-    # end count
-print('disjoint_count')
-print(disjoint_count)
-print('transition_count')
-print(transition_count)
-# calculate prob
-disjoint_prob = {}
-for key in disjoint_count:
-    disjoint_prob[key] = disjoint_count[key] / len(state_sequence)
+def load_sequence_data():
+    # read sequence data
+    f = open(SEQUENCE_PATH, 'r')
+    x = f.readlines()
+    for line in x:
+        for state in line:
+            if state != '\n':
+                state_sequence.append(state)
+    # done reading sequence data
 
-transition_prob = {}
-for condition_key, condition_counts in transition_count.items():
-    temp = {}
-    for key in condition_counts:
-        temp[key] = condition_counts[key] / sum(condition_counts.values())
-    transition_prob[condition_key] = temp
+def load_cpg_data():
+    # read cpg island positions
+    f = open(CPG_POSITION_PATH, 'r')
+    x = f.readlines()
+    for line in x:
+        position = line.split(' ')
+        cpg_islands.append((position[0], position[1]))
+    # done reading island positions
 
-print('disjoint probability')
-print(disjoint_prob)
-print('transition_probability')
-print(transition_prob)
+def calculate_probability():
+    disjoint_count = {}
+    transition_count = {}
+    # initialize local variable
+    for state in STATES:
+        disjoint_count[state] = 0
+    for state in STATES:
+        temp = {}
+        for state_2 in STATES:
+            temp[state_2] = 0
+            transition_count[state] = temp
+    # done initializing
+
+    # get counts
+    index = 0
+    for island in cpg_islands:
+        start_index = int(island[0]) - 1
+        end_index = int(island[1]) - 1
+        while index < start_index:
+            # disjoint count
+            state = state_sequence[index] + '-'
+            disjoint_count[state] += 1
+            # transition count
+            if index + 1 != start_index:
+                next_state = state_sequence[index + 1] + '-'
+            else:
+                next_state = state_sequence[index + 1] + '+'
+            transition_count[state][next_state] += 1
+            # update index
+            index += 1
+        while index <= end_index:
+            # disjoint count
+            state = state_sequence[index] + '+'
+            disjoint_count[state] += 1
+            # transition count
+            if index != end_index:
+                next_state = state_sequence[index + 1] + '+'
+            else:
+                next_state = state_sequence[index + 1] + '-'
+            transition_count[state][next_state] += 1
+            # update index
+            index += 1
+    print(disjoint_count)
+    print(transition_count)
+
+
+if __name__ == "__main__":
+    load_sequence_data()
+    load_cpg_data()
+    calculate_probability()
