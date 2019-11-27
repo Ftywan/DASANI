@@ -103,6 +103,8 @@ def calculate_probability():
     print(disjoint_prob)
     print(sum(disjoint_prob.values()))
     print(transition_prob)
+    print(sum(disjoint_count.values()))
+    print(len(state_sequence))
 
 
 if __name__ == "__main__":
