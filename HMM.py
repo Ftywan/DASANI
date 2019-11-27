@@ -9,14 +9,15 @@ state_sequence = []  # list of all training data
 cpg_islands = []
 disjoint_prob = {}
 transition_prob = {}
-emission_prob = {'A+':{'A': 1.0, 'G': 0.0, 'C': 0.0, 'T': 0.0},
-                 'A-':{'A': 1.0, 'G': 0.0, 'C': 0.0, 'T': 0.0},
-                 'G+':{'A': 0.0, 'G': 1.0, 'C': 0.0, 'T': 0.0},
-                 'G-':{'A': 0.0, 'G': 1.0, 'C': 0.0, 'T': 0.0},
-                 'C+':{'A': 0.0, 'G': 0.0, 'C': 1.0, 'T': 0.0},
-                 'C-':{'A': 0.0, 'G': 0.0, 'C': 1.0, 'T': 0.0},
-                 'T+':{'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0},
-                 'T+':{'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0}}
+emission_prob = {'A+': {'A': 1.0, 'G': 0.0, 'C': 0.0, 'T': 0.0},
+                 'A-': {'A': 1.0, 'G': 0.0, 'C': 0.0, 'T': 0.0},
+                 'G+': {'A': 0.0, 'G': 1.0, 'C': 0.0, 'T': 0.0},
+                 'G-': {'A': 0.0, 'G': 1.0, 'C': 0.0, 'T': 0.0},
+                 'C+': {'A': 0.0, 'G': 0.0, 'C': 1.0, 'T': 0.0},
+                 'C-': {'A': 0.0, 'G': 0.0, 'C': 1.0, 'T': 0.0},
+                 'T+': {'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0},
+                 'T+': {'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0}}
+
 
 def load_sequence_data():
     # read sequence data
@@ -38,6 +39,7 @@ def load_cpg_data():
         position = line.split(' ')
         cpg_islands.append((position[0], position[1]))
     # done reading island positions
+
 
 def calculate_probability():
     disjoint_count = {}
@@ -81,6 +83,14 @@ def calculate_probability():
             transition_count[state][next_state] += 1
             # update index
             index += 1
+    while index < len(state_sequence):
+        state = state_sequence[index] + '-'
+        disjoint_count[state] += 1
+        if index != len(state_sequence) - 1:
+            next_state = state_sequence[index + 1] + '-'
+            transition_count[state][next_state] += 1
+        index += 1
+
     print(disjoint_count)
     print(transition_count)
 
@@ -93,13 +103,14 @@ def calculate_probability():
         state_transition[state] = 0
         for next_state in transition_count[state]:
             state_transition[state] += transition_count[state][next_state]
-    
+
     for state in transition_count:
         temp = {}
         for next_state in transition_count[state]:
-            temp[next_state] = transition_count[state][next_state] / state_transition[state]
+            temp[next_state] = transition_count[state][next_state] / \
+                state_transition[state]
             transition_prob[state] = temp
-    
+
     print(disjoint_prob)
     print(sum(disjoint_prob.values()))
     print(transition_prob)
