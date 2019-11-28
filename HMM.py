@@ -18,7 +18,6 @@ emission_prob = {'A+': {'A': 1.0, 'G': 0.0, 'C': 0.0, 'T': 0.0},
                  'T+': {'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0},
                  'T+': {'A': 0.0, 'G': 0.0, 'C': 0.0, 'T': 1.0}}
 
-
 def load_sequence_data():
     # read sequence data
     f = open(SEQUENCE_PATH, 'r')
@@ -117,10 +116,45 @@ def calculate_probability():
     print(sum(disjoint_count.values()))
     print(len(state_sequence))
 
-def viterbi(observed):
+def viterbi(observed_sequence):
+    N = len(STATES)
+    T = len(observed_sequence)
+    v = [ [0 for i in range(N)] for j in range(T)]
+    backpointer = []
+    for s in range(0, N):
+        v[s][0] = disjoint_prob[STATES[s]] * emission_prob[STATES[s]][observed_sequence[0]]
+        #backpointer[s][0] = 0
+        backpointer[s][0] = None
+    for t in range(1, T):
+        for s in range(0, N):
+            v_max = float("-inf")
+            v_temp = []  # all states at only one time point
+            for ps in range(0, N):
+                v_max = v[ps][t-1] * transition_prob[STATES[ps][s]] * emission_prob[STATES[s]][observed_sequence[t]]
+                v_temp.append()
+            v[s][t] ＝ max(v_temp)
+            backpointer[s][t] = argmax(v_temp, axis = 0)[0]
+    bestpath_prob = max(v[:,T-1])
+    bestpath_pointer = argmax(v[:,T-1], axis = 0)[0]
+
+    # find best path
+    bestpath_index = []
+    bp_index = bestpath_pointer  # index of the last state of best path in STATES
+    while bp_index:
+        bestpath_index.append(bp_index)
+        bp_index = backpointer[bp_index]
+    bestpath_index.reverse()
+
+    best_path = []
+    for index in bestpath_index:
+        best_path.append(STATES[index])
+
+    print(best_path)
+    return best_path, bestpath_prob
 
 
 if __name__ == "__main__":
     load_sequence_data()
     load_cpg_data()
     calculate_probability()
+    bestpath, bp_prob = viterbi(state_sequence)
