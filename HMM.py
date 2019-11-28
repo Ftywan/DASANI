@@ -27,7 +27,7 @@ def load_sequence_data():
         for state in line:
             if state != '\n':
                 state_sequence.append(state)
-    print(state_sequence)
+    #print(state_sequence)
     # done reading sequence data
 
 
@@ -116,6 +116,8 @@ def calculate_probability():
     print(transition_prob)
     print(sum(disjoint_count.values()))
     print(len(state_sequence))
+
+def viterbi(observed):
 
 
 if __name__ == "__main__":
