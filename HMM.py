@@ -245,7 +245,7 @@ if __name__ == "__main__":
     calculate_probability()
     test = 'CGCGCGCGGGGGAAAGGGGCCCCGGCGCGGCATATCGCGCGGCGGCGCGCGCCCGCATATATATAATATTATATATATATATTTTATATTAGACGCGCGCGCGCCGCCCCGCGCGGCGGGGCGCGCGCCGCGCGCGCGCGCGCGCGCGCCCCGCGCG'
     print(len(test))
-    bestpath, bestpath_prob, v = viterbi(test_sequence)
+    bestpath, bestpath_prob, v = viterbi(state_sequence)
     # cpg = output(bestpath)
     # print(cpg)
     # print(bestpath)
