@@ -134,13 +134,12 @@ def viterbi(observed_sequence):
     for s in range(N):
         v[s][0] = math.log(disjoint_prob[STATES[s]]) + \
             math.log(emission_prob[STATES[s]][observed_sequence[0]])
-        #backpointer[s][0] = 0
-        backpointer[s][0] = 0
+        backpointer[s][0] = float('-inf')
     # done intialization
 
-    for s in range(N):
-        print(v[s][0])
-    print('\n')
+    # for s in range(N):
+    #     print(v[s][0])
+    # print('\n')
 
     # recursion step
     for t in range(1, T):
@@ -159,14 +158,9 @@ def viterbi(observed_sequence):
             backpointer[s][t] = max_state
 
     # done iteration
-<<<<<<< Updated upstream
 
     # print(backpointer)
-=======
-    
-    print(backpointer)
     print(len(backpointer[0]))
->>>>>>> Stashed changes
 
     # for s in range(N):
     #     print(v[s][T-1])
@@ -181,22 +175,30 @@ def viterbi(observed_sequence):
             bestpath_pointer = i
     # done termination
 
+    print(bestpath_pointer)
     print(bestpath_prob)
 
     # find best path
     bestpath_index = []
     bp_index = bestpath_pointer  # index of the last state of best path in STATES
+    print(bp_index)
+
     position = T - 1
-    while bp_index:
+    while bp_index >= 0:
         bestpath_index.append(bp_index)
-        position -= 1
+        #position -= 1
+        #print(backpointer[bp_index][position])
         bp_index = backpointer[bp_index][position]
+        #print(bp_index)
+        position -= 1
+
+    
     print(len(bestpath_index))
     
     bestpath_index.reverse()
 
-    print(bestpath_index)
-    print('\n')
+    # print(bestpath_index)
+    # print('\n')
 
     best_path = []
     for index in bestpath_index:
@@ -213,13 +215,9 @@ if __name__ == "__main__":
     load_test_data()
     load_cpg_data()
     calculate_probability()
-<<<<<<< Updated upstream
-    test = 'CGCGCGTA'
-=======
-    test = 'CGCGCGCGATCGCGGCGGCCGCATATATATTATATCGCGCGCGCGCGGCCG'
+    test = 'CGCGCGTATACGGGGGCTTTAAAACGTACGTACGTCAGCTTCTAAACGT'
     print(len(test))
->>>>>>> Stashed changes
-    bestpath, bp_prob, v = viterbi(test)
+    bestpath, bp_prob, v = viterbi(state_sequence)
     # for i in range(len(test_sequence)):
     #     total = 0
     #     for j in range(len(STATES)):
