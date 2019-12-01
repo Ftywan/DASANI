@@ -190,7 +190,8 @@ if __name__ == "__main__":
     load_test_data()
     load_cpg_data()
     calculate_probability()
-    bestpath, bp_prob, v = viterbi(test_sequence)
+    test = 'CGCGCGCGCGCGCGGCGGCCGCATATATATTATATATCGCGCGCGCGCGCGCGCGCCGGCCG'
+    bestpath, bp_prob, v = viterbi(test)
     # for i in range(len(test_sequence)):
     #     total = 0
     #     for j in range(len(STATES)):
