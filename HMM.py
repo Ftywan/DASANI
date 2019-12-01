@@ -221,12 +221,12 @@ if __name__ == "__main__":
     load_cpg_data()
     calculate_probability()
     bestpath, bp_prob, v = viterbi(test_sequence)
-    for i in range(len(test_sequence)):
-        total = 0
-        for j in range(len(STATES)):
-            total += v[j][i]
-        if total == 0.0:
-            print(i)
-            for x in range(len(STATES)):
-                print(v[x][i], v[x][i + 1])
-            break
+    # for i in range(len(test_sequence)):
+    #     total = 0
+    #     for j in range(len(STATES)):
+    #         total += v[j][i]
+    #     if total == 0.0:
+    #         print(i)
+    #         for x in range(len(STATES)):
+    #             print(v[x][i - 1], v[x][i])
+    #         break
