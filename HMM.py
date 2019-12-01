@@ -127,10 +127,6 @@ def calculate_probability():
 
     print('\n\n\nDisjoint Probability:', disjoint_prob)
     print('\n\n\nTransition Probability:', transition_prob)
-    for state in STATES:
-        print(sum(transition_prob[state].values()))
-    print(sum(disjoint_count.values()))
-    print(len(state_sequence))
 
 
 def viterbi(observed_sequence):
@@ -140,8 +136,6 @@ def viterbi(observed_sequence):
     v = [[0 for i in range(T)] for j in range(N)]  # float num for value
     # index of state in the STATES list
     backpointer = [[0 for i in range(T)] for j in range(N)]
-
-    print(T, len(v[0]), len(backpointer[0]))
 
     # initialization
     for s in range(N):
@@ -164,7 +158,6 @@ def viterbi(observed_sequence):
             v[s][t] = v_max
             backpointer[s][t] = max_state
     # done iteration
-    # print(backpointer)
 
     # termination step
     bestpath_prob = float('-inf')
@@ -174,36 +167,24 @@ def viterbi(observed_sequence):
             bestpath_prob = v[i][T-1]
             bestpath_pointer = i
     # done termination
-    # print(bestpath_pointer)
-    # print(bestpath_prob)
 
     # find best path
     bestpath_index = []
     bp_index = bestpath_pointer  # index of the last state of best path in STATES
 
     position = T - 1
-    # while position >= 0 and bp_index >= 0:
     while bp_index >= 0:
         bestpath_index.append(bp_index)
-        #position -= 1
-        # print(backpointer[bp_index][position])
         bp_index = backpointer[bp_index][position]
-        # print(bp_index)
         position -= 1
-
-    print(len(bestpath_index))
-
+    
     bestpath_index.reverse()
-
-    # print(bestpath_index)
-    # print('\n')
 
     best_path = []
     for index in bestpath_index:
         best_path.append(STATES[index])
     # found
 
-    # print(best_path)
     return best_path, bestpath_prob, v
 
 # def output(best_sequence):
@@ -251,15 +232,7 @@ if __name__ == "__main__":
     load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
     load_cpg_data()
     calculate_probability()
-<<<<<<< HEAD
-    test = 'CGCGCGCGGGGGAAAGGGGCCCCGGCGCGGCATATCGCGCGGCGGCGCGCGCCCGCATATATATAATATTATATATATATATTTTATATTAGACGCGCGCGCGCCGCCCCGCGCGGCGGGGCGCGCGCCGCGCGCGCGCGCGCGCGCGCCCCGCGCG'
-    print(len(test))
-    bestpath, bestpath_prob, v = viterbi(state_sequence)
-    # cpg = output(bestpath)
-    # print(cpg)
-    # print(bestpath)
-    get_island_position(bestpath)
-=======
+    # test = 'CGCGCGCGGGGGAAAGGGGCCCCGGCGCGGCATATCGCGCGGCGGCGCGCGCCCGCATATATATAATATTATATATATATATTTTATATTAGACGCGCGCGCGCCGCCCCGCGCGGCGGGGCGCGCGCCGCGCGCGCGCGCGCGCGCGCCCCGCGCG'
+    # print(len(test))
     bestpath, bestpath_prob, v = viterbi(test_sequence)
     output(bestpath)
->>>>>>> master
