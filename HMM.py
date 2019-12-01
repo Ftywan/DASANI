@@ -1,11 +1,13 @@
 # constant
 SEQUENCE_PATH = 'data/training.txt'
 CPG_POSITION_PATH = 'data/cpg_train.txt'
+TEST_SEQUENCE_PATH = 'data/testing.txt'
 STATES = ['A+', 'G+', 'C+', 'T+', 'A-', 'G-', 'C-', 'T-']
 OBSERVATIONS = ['A', 'G', 'C', 'T']
 
 # global variable
 state_sequence = []  # list of all training data
+test_sequence = []
 cpg_islands = []
 disjoint_prob = {}
 transition_prob = {}
@@ -28,7 +30,14 @@ def load_sequence_data():
                 state_sequence.append(state)
     #print(state_sequence)
     # done reading sequence data
-
+def load_test_data():
+    # read sequence data
+    f = open(TEST_SEQUENCE_PATH, 'r')
+    x = f.readlines()
+    for line in x:
+        for state in line:
+            if state != '\n':
+                test_sequence.append(state)
 
 def load_cpg_data():
     # read cpg island positions
@@ -56,6 +65,9 @@ def calculate_probability():
     # get counts
     index = 0
     for island in cpg_islands:
+        # start_index = int(island[0]) - 1
+        # end_index = int(island[1]) - 1
+                
         start_index = int(island[0]) - 1
         end_index = int(island[1]) - 1
         while index < start_index:
@@ -106,8 +118,7 @@ def calculate_probability():
     for state in transition_count:
         temp = {}
         for next_state in transition_count[state]:
-            temp[next_state] = transition_count[state][next_state] / \
-                state_transition[state]
+            temp[next_state] = transition_count[state][next_state] / state_transition[state]
             transition_prob[state] = temp
 
     print(disjoint_prob)
@@ -119,42 +130,69 @@ def calculate_probability():
 def viterbi(observed_sequence):
     N = len(STATES)
     T = len(observed_sequence)
-    v = [ [0 for i in range(N)] for j in range(T)]
-    backpointer = []
-    for s in range(0, N):
+    v = [ [0 for i in range(T)] for j in range(N) ] # float num for value
+    backpointer = [ [0 for i in range(T)] for j in range(N) ] # index of state in the STATES list
+
+    # initialization
+    for s in range(N):
         v[s][0] = disjoint_prob[STATES[s]] * emission_prob[STATES[s]][observed_sequence[0]]
         #backpointer[s][0] = 0
         backpointer[s][0] = None
+    # done intialization
+
+    for s in range(N):
+        print(v[s][0])
+    print('\n')
+
+    # recursion step
     for t in range(1, T):
-        for s in range(0, N):
+        for s in range(N):
             v_max = float("-inf")
-            v_temp = []  # all states at only one time point
-            for ps in range(0, N):
-                v_max = v[ps][t-1] * transition_prob[STATES[ps][s]] * emission_prob[STATES[s]][observed_sequence[t]]
-                v_temp.append()
-            v[s][t] ＝ max(v_temp)
-            backpointer[s][t] = argmax(v_temp, axis = 0)[0]
-    bestpath_prob = max(v[:,T-1])
-    bestpath_pointer = argmax(v[:,T-1], axis = 0)[0]
+            max_state = None
+            # v_temp = []  # all states at only one time point
+
+            for ps in range(N):
+                temp = v[ps][t-1] * transition_prob[STATES[ps]][STATES[s]] * emission_prob[STATES[s]][observed_sequence[t]]
+                if temp > v_max:
+                    v_max = temp
+                    max_state = ps
+            v[s][t] = v_max
+            backpointer[s][t] = max_state
+    # done iteration
+    # print(v)
+    # print(backpointer)
+
+    # termination step
+    bestpath_prob = 0
+    bestpath_pointer = None
+    for i in range(N):
+        if v[i][T-1] > bestpath_prob:
+            bestpath_prob = v[i][T-1]
+            bestpath_pointer = i
+    # done termination
 
     # find best path
     bestpath_index = []
     bp_index = bestpath_pointer  # index of the last state of best path in STATES
+    position = T - 1
     while bp_index:
         bestpath_index.append(bp_index)
-        bp_index = backpointer[bp_index]
+        position -= 1
+        bp_index = backpointer[bp_index][position]
     bestpath_index.reverse()
 
     best_path = []
     for index in bestpath_index:
         best_path.append(STATES[index])
+    # found
 
     print(best_path)
-    return best_path, bestpath_prob
+    return best_path, bestpath_prob, v
 
 
 if __name__ == "__main__":
     load_sequence_data()
+    load_test_data()
     load_cpg_data()
     calculate_probability()
-    bestpath, bp_prob = viterbi(state_sequence)
+    bestpath, bp_prob, v = viterbi(test_sequence)
