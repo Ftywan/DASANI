@@ -184,6 +184,7 @@ def viterbi(observed_sequence):
     print(bp_index)
 
     position = T - 1
+    #while position >= 0 and bp_index >= 0:
     while bp_index >= 0:
         bestpath_index.append(bp_index)
         #position -= 1
@@ -205,9 +206,22 @@ def viterbi(observed_sequence):
         best_path.append(STATES[index])
     # found
 
-    print(best_path)
+    # print(best_path)
     return best_path, bestpath_prob, v
 
+def output(best_sequence):
+    output_cpg = []
+    start = 0
+    while start < len(best_sequence) - 1:
+        if (best_sequence[start].endswith('+')):
+            end = start + 1
+            while end <= len(best_sequence) - 1:
+                if (best_sequence[end].endswith('-')):
+                    break
+            output_cpg.append([start, end - 1])
+            start = end
+        start += 1
+    return output_cpg
 
 
 if __name__ == "__main__":
@@ -217,7 +231,9 @@ if __name__ == "__main__":
     calculate_probability()
     test = 'CGCGCGTATACGGGGGCTTTAAAACGTACGTACGTCAGCTTCTAAACGT'
     print(len(test))
-    bestpath, bp_prob, v = viterbi(state_sequence)
+    bestpath, bestpath_prob, v = viterbi(state_sequence)
+    cpg = output(bestpath)
+    print(cpg)
     # for i in range(len(test_sequence)):
     #     total = 0
     #     for j in range(len(STATES)):
