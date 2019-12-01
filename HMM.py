@@ -34,6 +34,7 @@ def load_sequence_data():
                 state_sequence.append(state)
     #print(state_sequence)
     # done reading sequence data
+
 def load_test_data():
     # read sequence data
     f = open(TEST_SEQUENCE_PATH, 'r')
@@ -42,6 +43,7 @@ def load_test_data():
         for state in line:
             if state != '\n':
                 test_sequence.append(state)
+
 def load_cpg_data():
     # read cpg island positions
     f = open(CPG_POSITION_PATH, 'r')
@@ -51,9 +53,17 @@ def load_cpg_data():
         cpg_islands.append((position[0], position[1]))
     # done reading island positions
 
+def add_label(index):
+    for island in cpg_islands:
+        if int(island[0]) <= index + 1 <= int(island[1]):
+            return state_sequence[index] + '+'
+    return state_sequence[index] + '-'
+
+
 def calculate_probability():
     disjoint_count = {}
     transition_count = {}
+
     # initialize local variable
     for state in STATES:
         disjoint_count[state] = 0
@@ -65,51 +75,21 @@ def calculate_probability():
     # done initializing
 
     # get counts
-    index = 0
-    for island in cpg_islands:
-        # start_index = int(island[0]) - 1
-        # end_index = int(island[1]) - 1
-                
-        start_index = int(island[0])
-        end_index = int(island[1])
-        while index < start_index:
-            # disjoint count
-            state = state_sequence[index] + '-'
-            disjoint_count[state] += 1
-            # transition count
-            if index + 1 != start_index:
-                next_state = state_sequence[index + 1] + '-'
-            else:
-                next_state = state_sequence[index + 1] + '+'
-            transition_count[state][next_state] += 1
-            # update index
-            index += 1
-        while index <= end_index:
-            # disjoint count
-            state = state_sequence[index] + '+'
-            disjoint_count[state] += 1
-            # transition count
-            if index != end_index:
-                next_state = state_sequence[index + 1] + '+'
-            else:
-                next_state = state_sequence[index + 1] + '-'
-            transition_count[state][next_state] += 1
-            # update index
-            index += 1
-    while index < len(state_sequence):
-        state = state_sequence[index] + '-'
-        disjoint_count[state] += 1
-        if index != len(state_sequence) - 1:
-            next_state = state_sequence[index + 1] + '-'
-            transition_count[state][next_state] += 1
-        index += 1
+    for index in range(len(state_sequence) - 1):
+        current_s = add_label(index)
+        next_s = add_label(index + 1)
 
+        disjoint_count[current_s] += 1
+        transition_count[current_s][next_s] += 1
+    disjoint_count[add_label(len(state_sequence) - 1)] += 1 # last member
+        
     print(disjoint_count)
     print(transition_count)
 
     # calculate disjoint probability
     for state in disjoint_count:
         disjoint_prob[state] = disjoint_count[state] / len(state_sequence)
+
     # calculate transition probability
     state_transition = {}  # total transition count for each state
     for state in transition_count:
@@ -120,7 +100,10 @@ def calculate_probability():
     for state in transition_count:
         temp = {}
         for next_state in transition_count[state]:
-            temp[next_state] = transition_count[state][next_state] / state_transition[state]
+            prob = transition_count[state][next_state] / state_transition[state]
+            if prob == 0:
+                prob = 1e-30
+            temp[next_state] = prob
             transition_prob[state] = temp
 
     print(disjoint_prob)
