@@ -176,20 +176,22 @@ def viterbi(observed_sequence):
 
     # done iteration
     
-    print(backpointer)
-    
-    for s in range(N):
-        print(v[s][T-1])
-    print('\n')
+    # print(backpointer)
+
+    # for s in range(N):
+    #     print(v[s][T-1])
+    # print('\n')
     
     # termination step
-    bestpath_prob = 0
+    bestpath_prob = float('-inf')
     bestpath_pointer = None
     for i in range(N):
         if v[i][T-1] > bestpath_prob:
             bestpath_prob = v[i][T-1]
             bestpath_pointer = i
     # done termination
+
+    print(bestpath_prob)
 
     # find best path
     bestpath_index = []
@@ -200,6 +202,9 @@ def viterbi(observed_sequence):
         position -= 1
         bp_index = backpointer[bp_index][position]
     bestpath_index.reverse()
+
+    print(bestpath_index)
+    print('\n')
 
     best_path = []
     for index in bestpath_index:
