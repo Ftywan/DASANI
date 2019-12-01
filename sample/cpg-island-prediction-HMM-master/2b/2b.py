@@ -74,6 +74,8 @@ for x in transition:
 	# 	print transition[x][y],
 	# print
 
+print freq
+print transition
 # print PI
 
 # VITERBI IMPLEMENTATION.

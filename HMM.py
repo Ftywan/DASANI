@@ -68,8 +68,8 @@ def calculate_probability():
         # start_index = int(island[0]) - 1
         # end_index = int(island[1]) - 1
                 
-        start_index = int(island[0]) - 1
-        end_index = int(island[1]) - 1
+        start_index = int(island[0])
+        end_index = int(island[1])
         while index < start_index:
             # disjoint count
             state = state_sequence[index] + '-'
