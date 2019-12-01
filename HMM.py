@@ -170,10 +170,13 @@ def viterbi(observed_sequence):
                     max_state = ps
             v[s][t] = v_max
             backpointer[s][t] = max_state
-    # done iteration
-    # print(v)
-    # print(backpointer)
 
+    # done iteration
+    
+    # print(backpointer)
+    for s in range(N):
+        print(v[s][T-5])
+    print('\n')
     # termination step
     bestpath_prob = 0
     bestpath_pointer = None
