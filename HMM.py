@@ -121,6 +121,9 @@ def calculate_probability():
     print(len(state_sequence))
 
 
+print('running viterbi')
+
+
 def viterbi(observed_sequence):
     N = len(STATES)
     T = len(observed_sequence)
@@ -128,7 +131,7 @@ def viterbi(observed_sequence):
     # index of state in the STATES list
     backpointer = [[0 for i in range(T)] for j in range(N)]
 
-    print(T,len(v[0]),len(backpointer[0]))
+    print(T, len(v[0]), len(backpointer[0]))
 
     # initialization
     for s in range(N):
@@ -137,16 +140,11 @@ def viterbi(observed_sequence):
         backpointer[s][0] = float('-inf')
     # done intialization
 
-    # for s in range(N):
-    #     print(v[s][0])
-    # print('\n')
-
     # recursion step
     for t in range(1, T):
         for s in range(N):
             v_max = float("-inf")
             max_state = 0
-            # v_temp = []  # all states at only one time point
 
             for ps in range(N):
                 temp = v[ps][t-1] + math.log(transition_prob[STATES[ps]][STATES[s]]) + math.log(
@@ -156,15 +154,10 @@ def viterbi(observed_sequence):
                     max_state = ps
             v[s][t] = v_max
             backpointer[s][t] = max_state
-
     # done iteration
 
     # print(backpointer)
     print(len(backpointer[0]))
-
-    # for s in range(N):
-    #     print(v[s][T-1])
-    # print('\n')
 
     # termination step
     bestpath_prob = float('-inf')
@@ -184,18 +177,17 @@ def viterbi(observed_sequence):
     print(bp_index)
 
     position = T - 1
-    #while position >= 0 and bp_index >= 0:
+    # while position >= 0 and bp_index >= 0:
     while bp_index >= 0:
         bestpath_index.append(bp_index)
         #position -= 1
-        #print(backpointer[bp_index][position])
+        # print(backpointer[bp_index][position])
         bp_index = backpointer[bp_index][position]
-        #print(bp_index)
+        # print(bp_index)
         position -= 1
 
-    
     print(len(bestpath_index))
-    
+
     bestpath_index.reverse()
 
     # print(bestpath_index)
@@ -208,6 +200,7 @@ def viterbi(observed_sequence):
 
     # print(best_path)
     return best_path, bestpath_prob, v
+
 
 def output(best_sequence):
     output_cpg = []
@@ -223,23 +216,37 @@ def output(best_sequence):
         start += 1
     return output_cpg
 
+def get_island_position(bestpath):
+    on = []
+    off = []
+
+    if '+' in bestpath[0]:
+        on.append(1)
+    for i in range(len(bestpath) - 1):
+        if '-' in bestpath[i] and '+' in bestpath[i + 1]:
+            on.append(i + 2)
+        if '+' in bestpath[i] and '-' in bestpath[i + 1]:
+            off.append(i + 1)
+    if '+' in bestpath[len(bestpath) - 1]:
+        off.append(len(bestpath))
+    
+    assert len(on) == len(off)
+    print('\n\n\n[RESULT] There are', len(on), 'CpG islands in total')
+    for i in range(len(on)):
+        print(on[i], off[i])
+
+            
+
 
 if __name__ == "__main__":
     load_sequence_data()
     load_test_data()
     load_cpg_data()
     calculate_probability()
-    test = 'CGCGCGTATACGGGGGCTTTAAAACGTACGTACGTCAGCTTCTAAACGT'
+    test = 'CGCGCGCGGGGGAAAGGGGCCCCGGCGCGGCATATCGCGCGGCGGCGCGCGCCCGCATATATATAATATTATATATATATATTTTATATTAGACGCGCGCGCGCCGCCCCGCGCGGCGGGGCGCGCGCCGCGCGCGCGCGCGCGCGCGCCCCGCGCG'
     print(len(test))
-    bestpath, bestpath_prob, v = viterbi(state_sequence)
-    cpg = output(bestpath)
-    print(cpg)
-    # for i in range(len(test_sequence)):
-    #     total = 0
-    #     for j in range(len(STATES)):
-    #         total += v[j][i]
-    #     if total == 0.0:
-    #         print(i)
-    #         for x in range(len(STATES)):
-    #             print(v[x][i - 1], v[x][i])
-    #         break
+    bestpath, bestpath_prob, v = viterbi(test_sequence)
+    # cpg = output(bestpath)
+    # print(cpg)
+    # print(bestpath)
+    get_island_position(bestpath)
