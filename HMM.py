@@ -1,3 +1,5 @@
+import math
+
 # constant
 SEQUENCE_PATH = 'data/training.txt'
 CPG_POSITION_PATH = 'data/cpg_train.txt'
@@ -148,7 +150,7 @@ def viterbi(observed_sequence):
 
     # initialization
     for s in range(N):
-        v[s][0] = disjoint_prob[STATES[s]] * emission_prob[STATES[s]][observed_sequence[0]]
+        v[s][0] = math.log(disjoint_prob[STATES[s]]) + math.log(emission_prob[STATES[s]][observed_sequence[0]])
         #backpointer[s][0] = 0
         backpointer[s][0] = None
     # done intialization
@@ -165,7 +167,7 @@ def viterbi(observed_sequence):
             # v_temp = []  # all states at only one time point
 
             for ps in range(N):
-                temp = v[ps][t-1] * transition_prob[STATES[ps]][STATES[s]] * emission_prob[STATES[s]][observed_sequence[t]]
+                temp = v[ps][t-1] + math.log(transition_prob[STATES[ps]][STATES[s]]) + math.log(emission_prob[STATES[s]][observed_sequence[t]])
                 if temp > v_max:
                     v_max = temp
                     max_state = ps
@@ -174,10 +176,12 @@ def viterbi(observed_sequence):
 
     # done iteration
     
-    # print(backpointer)
+    print(backpointer)
+    
     for s in range(N):
-        print(v[s][T-5])
+        print(v[s][T-1])
     print('\n')
+    
     # termination step
     bestpath_prob = 0
     bestpath_pointer = None
