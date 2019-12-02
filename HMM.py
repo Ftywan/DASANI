@@ -6,12 +6,14 @@ from os.path import isfile, join
 # constants
 TRAINING_SEQUENCE_PATH = 'data/training.txt'
 TRAINING_CPG_PATH = 'data/cpg_train.txt'
+TESTING_SEQUENCE_PATH = ''
 STATES = ['A+', 'G+', 'C+', 'T+', 'A-', 'G-', 'C-', 'T-']
 
 # global variables
 currentDT = datetime.datetime.now()
 time = currentDT.strftime("%Y-%m-%d %H:%M:%S")
-out_file = open('CpG-Island Results: '+ time, 'w')
+out_file_path = 'result/CpG-Island Results: '+ time
+out_file = open(out_file_path, 'w')
 state_sequence = []  # list of all training data
 test_sequence = []  # list of testing data
 cpg_islands = []  # list of tuples indicating positions of CpG islands in the training data
@@ -35,7 +37,7 @@ def load_sequence_data(file_path, destination):
     for line in x:
         for state in line:
             if state != '\n':
-                destination.append(state)
+                destination.append(state.upper())
     f.close()
 
 
@@ -81,8 +83,8 @@ def calculate_probability():
         transition_count[current_s][next_s] += 1
     disjoint_count[add_label(len(state_sequence) - 1)] += 1  # last member
 
-    print('Disjoint counts:', disjoint_count)
-    print('\n\n\nTransition counts:', transition_count)
+    print('\n\nDisjoint counts:', disjoint_count)
+    print('\n\nTransition counts:', transition_count)
 
     # calculate disjoint probability
     for state in disjoint_count:
@@ -110,7 +112,7 @@ def calculate_probability():
 
 
 def viterbi(observed_sequence):
-    print('\nRunning Viterbi Algorithm...\n')
+    print('\n\n\nRunning Viterbi Algorithm...')
     N = len(STATES)
     T = len(observed_sequence)
     v = [[0 for i in range(T)] for j in range(N)]  # float num for value
@@ -185,7 +187,7 @@ def output(bestpath):
         off.append(len(bestpath))
 
     assert len(on) == len(off)
-    print('\n\n\n[RESULT] There are', len(on), 'CpG-islands in total')
+    print('\n\n[RESULTS] There are', len(on), 'CpG-islands in total.\nPosition pairs on the DNA sequence are:')
     for i in range(len(on)):
         print(on[i], off[i])
         out_file.write(' '.join((str(on[i]), '-', str(off[i]))) + '\n')
@@ -193,22 +195,24 @@ def output(bestpath):
             out_file.write(state_sequence[x])
         out_file.write('\n\n')
     out_file.write('source file: ' + TESTING_SEQUENCE_PATH)
+    print('\nEnd of the algorithm. Please check ', '\"'+out_file_path+'\"', 'for more information.')
 
 
 if __name__ == "__main__":
     print('Welcome to our CpG islands Detector!')
-    files = [ f for f in listdir('data') if isfile(join('data', f))]
+    files = [ f for f in listdir('data/test') if isfile(join('data/test', f))]
     print('Please choose one of the testing files: ' + str(files))
     user_input = input('Your input dataset: ')
 
-    while user_input != 'testing.txt' and user_input != 'testing-chr1.txt':
+    while user_input not in files:
         print('Please choose a file starting with "testing".')
         user_input = input('Your input dataset: ')
 
-    if user_input == 'testing.txt':
-        TESTING_SEQUENCE_PATH = 'data/testing.txt'
-    else:
-        TESTING_SEQUENCE_PATH = 'data/testing-chr1.txt'
+    TESTING_SEQUENCE_PATH = 'data/test/' + user_input
+    # if user_input == 'testing.txt':
+    #     TESTING_SEQUENCE_PATH = 'data/testing.txt'
+    # else:
+    #     TESTING_SEQUENCE_PATH = 'data/testing-chr1.txt'
 
     load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
     load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
