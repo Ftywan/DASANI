@@ -123,6 +123,7 @@ def viterbi(observed_sequence):
             math.log(emission_prob[STATES[s]][observed_sequence[0]])
         backpointer[s][0] = float('-inf')
     # done intialization
+    
     # recursion step
     for t in range(1, T):
         for s in range(N):
