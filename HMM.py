@@ -1,10 +1,11 @@
 import math
 import datetime
+from os import listdir
+from os.path import isfile, join
  
 # constants
 TRAINING_SEQUENCE_PATH = 'data/training.txt'
 TRAINING_CPG_PATH = 'data/cpg_train.txt'
-#TESTING_SEQUENCE_PATH = None
 STATES = ['A+', 'G+', 'C+', 'T+', 'A-', 'G-', 'C-', 'T-']
 
 # global variables
@@ -26,27 +27,6 @@ emission_prob = {
     'G-': {'A': 1e-30, 'C': 1e-30, 'T': 1e-30, 'G': 1.0},
     'G+': {'A': 1e-30, 'C': 1e-30, 'T': 1e-30, 'G': 1.0}
 }
-
-# def load_sequence_data():
-#     # read sequence data
-#     f = open(SEQUENCE_PATH, 'r')
-#     x = f.readlines()
-#     for line in x:
-#         for state in line:
-#             if state != '\n':
-#                 state_sequence.append(state)
-#     # print(state_sequence)
-#     # done reading sequence data
-
-
-# def load_test_data():
-#     # read sequence data
-#     f = open(TEST_SEQUENCE_PATH, 'r')
-#     x = f.readlines()
-#     for line in x:
-#         for state in line:
-#             if state != '\n':
-#                 test_sequence.append(state)
 
 
 def load_sequence_data(file_path, destination):
@@ -187,20 +167,6 @@ def viterbi(observed_sequence):
 
     return best_path, bestpath_prob, v
 
-# def output(best_sequence):
-#     output_cpg = []
-#     start = 0
-#     while start < len(best_sequence) - 1:
-#         if (best_sequence[start].endswith('+')):
-#             end = start + 1
-#             while end <= len(best_sequence) - 1:
-#                 if (best_sequence[end].endswith('-')):
-#                     break
-#             output_cpg.append([start, end - 1])
-#             start = end
-#         start += 1
-#     return output_cpg
-
 
 def output(bestpath):
     out_file.write('Cpg-Islands prediction results:\n\n')
@@ -227,39 +193,25 @@ def output(bestpath):
         out_file.write('\n\n')
     out_file.write('source file: ' + TESTING_SEQUENCE_PATH)
 
-# if __name__ == "__main__":
-#     load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
-#     load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
-#     load_cpg_data()
-#     calculate_probability()
-#     # test = 'CGCGCGCGGGGGAAAGGGGCCCCGGCGCGGCATATCGCGCGGCGGCGCGCGCCCGCATATATATAATATTATATATATATATTTTATATTAGACGCGCGCGCGCCGCCCCGCGCGGCGGGGCGCGCGCCGCGCGCGCGCGCGCGCGCGCCCCGCGCG'
-#     # print(len(test))
-#     bestpath, bestpath_prob, v = viterbi(test_sequence)
-#     output(bestpath)
 
 if __name__ == "__main__":
     print('Welcome to our CpG islands Detector!')
-    print('Please choose one of the following two datasets: data/testing.txt ; data/testing-chr1.txt')
+    files = [ f for f in listdir('data') if isfile(join('data', f))]
+    print('Please choose one of the testing files: ' + str(files))
     user_input = input('Your input dataset: ')
 
-    while user_input != 'data/testing.txt' and user_input != 'data/testing-chr1.txt':
-        print('Please choose one of the following two datasets: data/testing.txt ; data/testing-chr1.txt')
+    while user_input != 'testing.txt' and user_input != 'testing-chr1.txt':
+        print('Please choose a file starting with "testing".')
         user_input = input('Your input dataset: ')
 
-    if user_input == 'data/testing.txt':
+    if user_input == 'testing.txt':
         TESTING_SEQUENCE_PATH = 'data/testing.txt'
-        load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
-        load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
-        load_cpg_data()
-        calculate_probability()
-        bestpath, bestpath_prob, v = viterbi(test_sequence)
-        output(bestpath)
     else:
         TESTING_SEQUENCE_PATH = 'data/testing-chr1.txt'
-        load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
-        load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
-        load_cpg_data()
-        calculate_probability()
-        bestpath, bestpath_prob, v = viterbi(test_sequence)
-        output(bestpath)
 
+    load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
+    load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
+    load_cpg_data()
+    calculate_probability()
+    bestpath, bestpath_prob, v = viterbi(test_sequence)
+    output(bestpath)
