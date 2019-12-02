@@ -4,7 +4,7 @@ import datetime
 # constants
 TRAINING_SEQUENCE_PATH = 'data/training.txt'
 TRAINING_CPG_PATH = 'data/cpg_train.txt'
-TESTING_SEQUENCE_PATH = 'data/testing.txt'
+#TESTING_SEQUENCE_PATH = None
 STATES = ['A+', 'G+', 'C+', 'T+', 'A-', 'G-', 'C-', 'T-']
 
 # global variables
@@ -227,12 +227,39 @@ def output(bestpath):
         out_file.write('\n\n')
     out_file.write('source file: ' + TESTING_SEQUENCE_PATH)
 
+# if __name__ == "__main__":
+#     load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
+#     load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
+#     load_cpg_data()
+#     calculate_probability()
+#     # test = 'CGCGCGCGGGGGAAAGGGGCCCCGGCGCGGCATATCGCGCGGCGGCGCGCGCCCGCATATATATAATATTATATATATATATTTTATATTAGACGCGCGCGCGCCGCCCCGCGCGGCGGGGCGCGCGCCGCGCGCGCGCGCGCGCGCGCCCCGCGCG'
+#     # print(len(test))
+#     bestpath, bestpath_prob, v = viterbi(test_sequence)
+#     output(bestpath)
+
 if __name__ == "__main__":
-    load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
-    load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
-    load_cpg_data()
-    calculate_probability()
-    # test = 'CGCGCGCGGGGGAAAGGGGCCCCGGCGCGGCATATCGCGCGGCGGCGCGCGCCCGCATATATATAATATTATATATATATATTTTATATTAGACGCGCGCGCGCCGCCCCGCGCGGCGGGGCGCGCGCCGCGCGCGCGCGCGCGCGCGCCCCGCGCG'
-    # print(len(test))
-    bestpath, bestpath_prob, v = viterbi(test_sequence)
-    output(bestpath)
+    print('Welcome to our CpG islands Detector!')
+    print('Please choose one of the following two datasets: data/testing.txt ; data/testing-chr1.txt')
+    user_input = input('Your input dataset: ')
+
+    while user_input != 'data/testing.txt' and user_input != 'data/testing-chr1.txt':
+        print('Please choose one of the following two datasets: data/testing.txt ; data/testing-chr1.txt')
+        user_input = input('Your input dataset: ')
+
+    if user_input == 'data/testing.txt':
+        TESTING_SEQUENCE_PATH = 'data/testing.txt'
+        load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
+        load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
+        load_cpg_data()
+        calculate_probability()
+        bestpath, bestpath_prob, v = viterbi(test_sequence)
+        output(bestpath)
+    else:
+        TESTING_SEQUENCE_PATH = 'data/testing-chr1.txt'
+        load_sequence_data(TRAINING_SEQUENCE_PATH, state_sequence)
+        load_sequence_data(TESTING_SEQUENCE_PATH, test_sequence)
+        load_cpg_data()
+        calculate_probability()
+        bestpath, bestpath_prob, v = viterbi(test_sequence)
+        output(bestpath)
+
