@@ -29,8 +29,12 @@ either a screen shot or a transcript of an interesting sample session;
 1. The final results would be in two parts: a message in the console showing the starting and ending position pairs of the CpG Islands; a file in the result folder have whole sequences of islands and some other details.
 > You can also add your own DNA sequence files to the `test\` folder and choose it to be executed as the program begins.
 
-code excerpt showing some interesting part(s) of your Python code and some explanation of it;
+#### code excerpt showing some interesting part(s) of your Python code and some explanation of it;
 brief description of what each team member learned in this project;
-what you would like to add to your program if you had more time;
+
+#### Possible Add-ons
+1. Input side: support to more biological data format like FASTA.
+2. 
+
 citations for any references you used in the project. This should include the names and URLs of any websites that you used and whose ideas or other resources were incorporated into your project. In each case, describe in a sentence what role that website played in your project and what you incorporated from it.
 For 5 points of extra credit, include a section with a heading "Partners' Reflections" with two subsections, one for each partner. Each subsection should give the partner's name, main role(s) in the project, a description of the challenges and benefits of the partnership from that partner's perspective.
