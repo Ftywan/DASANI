@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Report for CpG Island Detector Using HMM and Viterbi Algorithm</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h2 id="report-for-cpg-island-detector-using-hmm-and-viterbi-algorithm">Report for CpG Island Detector Using HMM and Viterbi Algorithm</h2>
+<h4 id="team-member-and-job-description">Team Member and Job Description</h4>
+<p>Jinghan Lu: implemented the Viterbi Algorithm
+Tianyuan Fu: implemented algorithms for probability, finished up the implementation of Viterbi Algorithm</p>
+<h4 id="functionality-of-cpg-island-detector">Functionality of CpG Island Detector</h4>
+<p>This program is supposed to identify the potential CpG Islands in a given input DNA sequence. CpG island is defined as a subsequence of a long DNA sequence, which is rich in C and G. According to biological probabilistic researches, DNA regions with high reichness in C and G are more likely to carry gene information. Therefore, this approach to detect CpG Islands can be useful in real-time biological researches.</p>
+<p>The input format should be a file describing the composition of a DNA sequence, comprised with A, G, C, T, 4 kinds of nucleotide acids.
+The output will be starting and ending position pairs displayed to the console, along with a file containing the whole CpG Island subsequence and more details.</p>
+<h4 id="technical-details">Technical Details</h4>
+<p>For our CpG island detector, we used Hidden Markov Models technique, which allows us to think about causal factors in a probabilistic model with both the observed DNA sequence, which consists of four base pairs of A, G, C, T (known as nucleic acids), and the hidden CpG islands. A HMM consists of a set of N hidden states, which in our case are eight base-sign pairs, where the bases are A, G, C, T and the signs are “+” (belongs to a CpG island) and “-” (does not belong to a CpG island), a transition probability matrix which gives the probability of moving from one state to the another, an observed sequence which is the DNA sequence, a sequence of emission probabilities which represents the probability of observe a base given a hidden state (e.g., P(A|A+) = 1, P(C|G-) = 0…), and an initial probability distribution over the eight hidden states(A+, A-, C+, C-, G+, G-, T+, T-).</p>
+<p>In order to determine the most like state sequence given an observed DNA sequence, we implemented a Viterbi algorithm. Viterbi is a kind of dynamic programming, and the idea is to process a observed DNA sequence from left to right by calculating the probability that the HMM is in a certain state after processing all the previous observed AGCTs and output the most possible state sequence for CpG island detections. In our Viterbi, we first initialized a sequence probability matrix and a back pointer matrix to keep track of the states. For each hidden state, we recursively calculated their Viterbi path probabilities by multiplying the previous Viterbi path probability, the transition probability from the previous state to the current one, and the emission probability. Then we chose the maximum Viterbi value to be the most possible state for the that observed nucleic acid and stored the index of the previous state that led to the state with this maximum Viterbi value. At the end of the sequence after the recursion, we picked the state with the highest probability and back trace to get the best state sequence.</p>
+<p>In the Viterbi algorithm where we need to calculate probabilities, we used log of the probabilities. The reason is that if we compute probabilities normally, the Viterbi values dropped to zero after a certain point because of the small values of the transition probabilities, which made the comparison hard and led to a wrong result. With the log function, we would be able to compare the values and choose the right state. Additionally, when multiplying emission probabilities in Viterbi, we changed every zero emission probability and transition probability to a small number 10^-30 since log(0) is not defined.</p>
+<h4 id="interesting-sample-session">Interesting Sample Session</h4>
+<p>output: output of the probabilities and the postions of CpG island detector
+<img src="file:////Users/home/OneDrive - National University of Singapore/UW AU1920/CSE 415/Project/DASANI/output.jpg" alt=""></p>
+<p>output file: output file containing the CpG islands' sequences, their positions, and the source of testing file
+<img src="file:////Users/home/OneDrive - National University of Singapore/UW AU1920/CSE 415/Project/DASANI/outfile.jpg" alt=""></p>
+<h4 id="demo-instructions">Demo Instructions</h4>
+<ol>
+<li>Unzip the zip file and put the decompressed folder in a directory that you are familiar with</li>
+<li>Open up a shell window (Linux) / terminal window (macOS) and change the directory into the upzipped folder</li>
+<li>Check the content of the folder:
+<ol>
+<li>There is a folder called <code>result/</code>. This will be where the output files locate</li>
+<li>There is a <code>data/</code> folder. Inside <code>data/</code>, there should be 3 text files and a <code>test/</code> folder containing two text files. These are the training and testing data for this program.</li>
+</ol>
+</li>
+<li>Back to the console. Try with the command:
+<code>python3 HMM.py</code></li>
+<li>Seeing the prompted message, choose a testing file from the message and type in the console. Hit <code>enter</code> to continue.</li>
+<li>Intermediate results, such as disjoint probability, transition probability would be prinred in the console.</li>
+<li>The final results would be in two parts: a message in the console showing the starting and ending position pairs of the CpG Islands; a file in the result folder have whole sequences of islands and some other details.</li>
+</ol>
+<blockquote>
+<p>You can also add your own DNA sequence files to the <code>test\</code> folder and choose it to be executed as the program begins.</p>
+</blockquote>
+<h4 id="code-excerpt">Code Excerpt</h4>
+<p>user interaction: allows user to choose the testing file
+<img src="file:////Users/home/OneDrive - National University of Singapore/UW AU1920/CSE 415/Project/DASANI/in.jpg" alt=""></p>
+<p>output: output a file showing the CpG islands and the testing file path
+<img src="file:////Users/home/OneDrive - National University of Singapore/UW AU1920/CSE 415/Project/DASANI/out.jpg" alt=""></p>
+<p>log function: provides more accrate comparison between Viter values
+<img src="file:////Users/home/OneDrive - National University of Singapore/UW AU1920/CSE 415/Project/DASANI/recursion.jpg" alt=""></p>
+<h4 id="what-each-team-member-learned">What Each Team Member Learned</h4>
+<p>Tianyuan Fu: HMM is a model that is not formally taught in class, and that is the point of chanllenges and attractiveness. Understanding the model is not the easy thing, involing many concepts from statistics. But during the process of accepting the concepts, I am happy to see that I can apply concepts previously learnt in lectures, most of which are high-level views, and that eased the carryout of the whole project. It would be so helpful to have such an experience since new models of AI and ML are emerging. Having the experience of this project makes me confident to confront projects with more difficulty in the future.</p>
+<p>Jinghan Lu: I have learned the Hidden Markov Models which allows us to think about observed and hidden events as causal factors in a probabilistic model and the Viterbi algorithm which allows us to find the most possible state sequence given an HMM and an observed sequence. Additionally, I have learned how HMM can be also applied to many different applications, such as sequence recognition and speech recogition.</p>
+<h4 id="possible-add-ons">Possible Add-ons</h4>
+<ul>
+<li>Input side: support to more biological data format like FASTA.</li>
+<li>Processing side: the current method for calculating the probability can be improved to have less complexity</li>
+<li>Output side: a graphical user interface (GUI) can be implemented to display the results.</li>
+</ul>
+<h4 id="references"><em>References</em></h4>
+<ol>
+<li>GitHub Repository: <a href="https://github.com/devanshdalal/cpg-island-prediction-HMM">https://github.com/devanshdalal/cpg-island-prediction-HMM</a>
+A smaple implementation of CpG Island Detector with HMM and Viterbi Algorithm. We have our training data set from this project, but different concepts of implementing the program.</li>
+<li>HMM slides from CMU: <a href="https://www.cs.cmu.edu/~02710/Lectures/HMMs.pdf">https://www.cs.cmu.edu/~02710/Lectures/HMMs.pdf</a>
+Provided some hint and insights to HMM.</li>
+<li>National Center for Biotechnology Information: <a href="https://www.ncbi.nlm.nih.gov/genome/gdv/browser/">https://www.ncbi.nlm.nih.gov/genome/gdv/browser/</a>
+NCBI provides us a dataset of human DNA, Chromesome 1, which we used the first 1110 lines of this dataset as one of the testing file.</li>
+<li>HMM Chapter from Standford: <a href="https://web.stanford.edu/~jurafsky/slp3/A.pdf">https://web.stanford.edu/~jurafsky/slp3/A.pdf</a>
+We used this chapter of HMM as a tutorial for learning HMM and implmenting Viterbi algorithm.</li>
+</ol>
+
+    </body>
+    </html>
