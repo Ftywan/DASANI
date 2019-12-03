@@ -33,8 +33,21 @@ either a screen shot or a transcript of an interesting sample session;
 brief description of what each team member learned in this project;
 
 #### Possible Add-ons
-1. Input side: support to more biological data format like FASTA.
-2. 
+- Input side: support to more biological data format like FASTA.
+- Processing side: the current method for calculating the probability can be improved to have less complexity
+- Output side: a graphical user interface (GUI) can be implemented to display the results.
 
-citations for any references you used in the project. This should include the names and URLs of any websites that you used and whose ideas or other resources were incorporated into your project. In each case, describe in a sentence what role that website played in your project and what you incorporated from it.
+#### *References*
+1. GitHub Repository: https://github.com/devanshdalal/cpg-island-prediction-HMM
+A smaple implementation of CpG Island Detector with HMM and Viterbi Algorithm. We have our training data set from this project, but different concepts of implementing the program.
+2. HMM slides from CMU: https://www.cs.cmu.edu/~02710/Lectures/HMMs.pdf
+Provided some hint and insights to HMM.
+3. TODO
+
 For 5 points of extra credit, include a section with a heading "Partners' Reflections" with two subsections, one for each partner. Each subsection should give the partner's name, main role(s) in the project, a description of the challenges and benefits of the partnership from that partner's perspective.
+
+#### Partners' Reflections
+Tianyuan Fu: Implemented the probability algorithms, output method and debugging Viterbi.
+HMM is a model that is not formally taught in class, and that is the point of chanllenges and attractiveness. Understanding the model is not the easy thing, involing many concepts from statistics. But during the process of accepting the concepts, I am happy to see that I can apply concepts previously learnt in lectures, most of which are high-level views, and that eased the carryout of the whole project. It would be so helpful to have such an experience since new models of AI and ML are emerging. Having the experience of this project makes me confident to confront projects with more difficulty in the future.
+
+Jinghan Lu:
