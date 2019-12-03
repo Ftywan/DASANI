@@ -11,10 +11,15 @@ The input format should be a file describing the composition of a DNA sequence, 
 The output will be starting and ending position pairs displayed to the console, along with a file containing the whole CpG Island subsequence and more details.
 
 #### Technical Details
-//TODO 
-technique used and brief description (half a page) of how that technique works. If you use multiple AI techniques then describe each one but with somewhat less detail for each one;
-either a screen shot or a transcript of an interesting sample session;
+For our CpG island detector, we used Hidden Markov Models technique, which allows us to think about causal factors in a probabilistic model with both the observed DNA sequence, which consists of four base pairs of A, G, C, T (known as nucleic acids), and the hidden CpG islands. A HMM consists of a set of N hidden states, which in our case are eight base-sign pairs, where the bases are A, G, C, T and the signs are “+” (belongs to a CpG island) and “-” (does not belong to a CpG island), a transition probability matrix which gives the probability of moving from one state to the another, an observed sequence which is the DNA sequence, a sequence of emission probabilities which represents the probability of observe a base given a hidden state (e.g., P(A|A+) = 1, P(C|G-) = 0…), and an initial probability distribution over the eight hidden states(A+, A-, C+, C-, G+, G-, T+, T-).
 
+In order to determine the most like state sequence given an observed DNA sequence, we implemented a Viterbi algorithm. Viterbi is a kind of dynamic programming, and the idea is to process a observed DNA sequence from left to right by calculating the probability that the HMM is in a certain state after processing all the previous observed AGCTs and output the most possible state sequence for CpG island detections. In our Viterbi, we first initialized a sequence probability matrix and a back pointer matrix to keep track of the states. For each hidden state, we recursively calculated their Viterbi path probabilities by multiplying the previous Viterbi path probability, the transition probability from the previous state to the current one, and the emission probability. Then we chose the maximum Viterbi value to be the most possible state for the that observed nucleic acid and stored the index of the previous state that led to the state with this maximum Viterbi value. At the end of the sequence after the recursion, we picked the state with the highest probability and back trace to get the best state sequence.
+
+In the Viterbi algorithm where we need to calculate probabilities, we used log of the probabilities. The reason is that if we compute probabilities normally, the Viterbi values dropped to zero after a certain point because of the small values of the transition probabilities, which made the comparison hard and led to a wrong result. With the log function, we would be able to compare the values and choose the right state. Additionally, when multiplying emission probabilities in Viterbi, we changed every zero emission probability and transition probability to a small number 10^-30 since log(0) is not defined.
+
+
+#### Interesting Sample Session
+// input/output screenshot:
 
 #### Demo Instructions
 1. Unzip the zip file and put the decompressed folder in a directory that you are familiar with
@@ -29,8 +34,20 @@ either a screen shot or a transcript of an interesting sample session;
 1. The final results would be in two parts: a message in the console showing the starting and ending position pairs of the CpG Islands; a file in the result folder have whole sequences of islands and some other details.
 > You can also add your own DNA sequence files to the `test\` folder and choose it to be executed as the program begins.
 
-#### code excerpt showing some interesting part(s) of your Python code and some explanation of it;
-brief description of what each team member learned in this project;
+#### Code Excerpt
+user interaction: allows user to choose the testing file
+// screenshot
+
+output: output a file showing the CpG islands and the testing file path
+// screenshot
+
+log function: provides more accrate comparison between Viter values
+// screenshot
+
+#### What Each Team Member Learned
+Tianyuan Fu:
+
+Jinghan Lu: I have learned the Hidden Markov Models which allows us to think about observed and hidden events as causal factors in a probabilistic model and the Viterbi algorithm which allows us to find the most possible state sequence given an HMM and an observed sequence. Additionally, I have learned how HMM can be also applied to many different applications, such as sequence recognition and speech recogition.
 
 #### Possible Add-ons
 - Input side: support to more biological data format like FASTA.
@@ -42,7 +59,11 @@ brief description of what each team member learned in this project;
 A smaple implementation of CpG Island Detector with HMM and Viterbi Algorithm. We have our training data set from this project, but different concepts of implementing the program.
 2. HMM slides from CMU: https://www.cs.cmu.edu/~02710/Lectures/HMMs.pdf
 Provided some hint and insights to HMM.
-3. TODO
+3. National Center for Biotechnology Information: https://www.ncbi.nlm.nih.gov/genome/gdv/browser/
+NCBI provides us a dataset of human DNA, Chromesome 1, which we used the first 1110 lines of this dataset as one of the testing file.
+4. HMM Chapter from Standford: https://web.stanford.edu/~jurafsky/slp3/A.pdf
+We used this chapter of HMM as a tutorial for learning HMM and implmenting Viterbi algorithm. 
+
 
 For 5 points of extra credit, include a section with a heading "Partners' Reflections" with two subsections, one for each partner. Each subsection should give the partner's name, main role(s) in the project, a description of the challenges and benefits of the partnership from that partner's perspective.
 
@@ -50,4 +71,5 @@ For 5 points of extra credit, include a section with a heading "Partners' Reflec
 Tianyuan Fu: Implemented the probability algorithms, output method and debugging Viterbi.
 HMM is a model that is not formally taught in class, and that is the point of chanllenges and attractiveness. Understanding the model is not the easy thing, involing many concepts from statistics. But during the process of accepting the concepts, I am happy to see that I can apply concepts previously learnt in lectures, most of which are high-level views, and that eased the carryout of the whole project. It would be so helpful to have such an experience since new models of AI and ML are emerging. Having the experience of this project makes me confident to confront projects with more difficulty in the future.
 
-Jinghan Lu:
+Jinghan Lu: Implemented the Viterbi Algorithm
+The 
