@@ -220,3 +220,4 @@ if __name__ == "__main__":
     calculate_probability()
     bestpath, bestpath_prob, v = viterbi(test_sequence)
     output(bestpath)
+    # print(bestpath)
