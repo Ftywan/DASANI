@@ -36,16 +36,16 @@ In the Viterbi algorithm where we need to calculate probabilities, we used log o
 
 #### Code Excerpt
 user interaction: allows user to choose the testing file
-// screenshot
+![](in.jpg)
 
 output: output a file showing the CpG islands and the testing file path
-// screenshot
+![](out.jpg)
 
 log function: provides more accrate comparison between Viter values
-// screenshot
+![](recursion.jpg)
 
 #### What Each Team Member Learned
-Tianyuan Fu:
+Tianyuan Fu: HMM is a model that is not formally taught in class, and that is the point of chanllenges and attractiveness. Understanding the model is not the easy thing, involing many concepts from statistics. But during the process of accepting the concepts, I am happy to see that I can apply concepts previously learnt in lectures, most of which are high-level views, and that eased the carryout of the whole project. It would be so helpful to have such an experience since new models of AI and ML are emerging. Having the experience of this project makes me confident to confront projects with more difficulty in the future.
 
 Jinghan Lu: I have learned the Hidden Markov Models which allows us to think about observed and hidden events as causal factors in a probabilistic model and the Viterbi algorithm which allows us to find the most possible state sequence given an HMM and an observed sequence. Additionally, I have learned how HMM can be also applied to many different applications, such as sequence recognition and speech recogition.
 
@@ -66,10 +66,3 @@ We used this chapter of HMM as a tutorial for learning HMM and implmenting Viter
 
 
 For 5 points of extra credit, include a section with a heading "Partners' Reflections" with two subsections, one for each partner. Each subsection should give the partner's name, main role(s) in the project, a description of the challenges and benefits of the partnership from that partner's perspective.
-
-#### Partners' Reflections
-Tianyuan Fu: Implemented the probability algorithms, output method and debugging Viterbi.
-HMM is a model that is not formally taught in class, and that is the point of chanllenges and attractiveness. Understanding the model is not the easy thing, involing many concepts from statistics. But during the process of accepting the concepts, I am happy to see that I can apply concepts previously learnt in lectures, most of which are high-level views, and that eased the carryout of the whole project. It would be so helpful to have such an experience since new models of AI and ML are emerging. Having the experience of this project makes me confident to confront projects with more difficulty in the future.
-
-Jinghan Lu: Implemented the Viterbi Algorithm
-The 
