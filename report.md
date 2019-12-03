@@ -19,7 +19,12 @@ In the Viterbi algorithm where we need to calculate probabilities, we used log o
 
 
 #### Interesting Sample Session
-// input/output screenshot:
+output: output of the probabilities and the postions of CpG island detector
+![](output.jpg)
+
+output file: output file containing the CpG islands' sequences, their positions, and the source of testing file
+![](outfile.jpg)
+
 
 #### Demo Instructions
 1. Unzip the zip file and put the decompressed folder in a directory that you are familiar with
@@ -63,6 +68,3 @@ Provided some hint and insights to HMM.
 NCBI provides us a dataset of human DNA, Chromesome 1, which we used the first 1110 lines of this dataset as one of the testing file.
 4. HMM Chapter from Standford: https://web.stanford.edu/~jurafsky/slp3/A.pdf
 We used this chapter of HMM as a tutorial for learning HMM and implmenting Viterbi algorithm. 
-
-
-For 5 points of extra credit, include a section with a heading "Partners' Reflections" with two subsections, one for each partner. Each subsection should give the partner's name, main role(s) in the project, a description of the challenges and benefits of the partnership from that partner's perspective.
